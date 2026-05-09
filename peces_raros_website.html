@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peces Raros | Colectivo Creativo</title>
+  <style>
+    :root {
+      --paper: #f4efe7;
+      --ink: #111111;
+      --deep: #07131f;
+      --blue: #174fe8;
+      --teal: #00b7a8;
+      --coral: #ff4d4d;
+      --yellow: #ffd44d;
+      --muted: #6d6a64;
+      --line: 3px solid var(--ink);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.15;
+      background-image:
+        radial-gradient(circle at 10% 20%, var(--teal) 0 2px, transparent 2px),
+        radial-gradient(circle at 80% 30%, var(--coral) 0 2px, transparent 2px),
+        radial-gradient(circle at 50% 80%, var(--blue) 0 1.5px, transparent 1.5px);
+      background-size: 80px 80px, 120px 120px, 65px 65px;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 36px;
+      background: rgba(244, 239, 231, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: var(--line);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border: var(--line);
+      border-radius: 50% 50% 50% 8px;
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      transform: rotate(-18deg);
+      box-shadow: 4px 4px 0 var(--coral);
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+
+    nav a:hover {
+      color: var(--coral);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 18px;
+      border: var(--line);
+      color: var(--ink);
+      background: var(--yellow);
+      text-decoration: none;
+      font-weight: 900;
+      text-transform: uppercase;
+      box-shadow: 5px 5px 0 var(--ink);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translate(4px, 4px);
+      box-shadow: 1px 1px 0 var(--ink);
+    }
+
+    .btn.dark {
+      background: var(--ink);
+      color: var(--paper);
+      box-shadow: 5px 5px 0 var(--teal);
+    }
+
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 30px;
+      align-items: center;
+      padding: 70px 6vw 50px;
+      border-bottom: var(--line);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 12px;
+      border: var(--line);
+      background: var(--teal);
+      color: var(--ink);
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      transform: rotate(-1.5deg);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(4rem, 10vw, 10rem);
+      line-height: 0.82;
+      letter-spacing: -6px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 span {
+      display: block;
+      color: var(--coral);
+      text-shadow: 5px 5px 0 var(--blue);
+    }
+
+    .hero p {
+      max-width: 620px;
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      line-height: 1.45;
+      color: #292622;
+      font-weight: 700;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .hero-art {
+      position: relative;
+      min-height: 540px;
+      border: var(--line);
+      background:
+        linear-gradient(135deg, rgba(255, 77, 77, 0.95) 0 22%, transparent 22%),
+        linear-gradient(210deg, rgba(23, 79, 232, 0.95) 0 34%, transparent 34%),
+        var(--paper);
+      box-shadow: 12px 12px 0 var(--ink);
+      overflow: hidden;
+    }
+
+    .hero-art::before,
+    .hero-art::after {
+      content: "";
+      position: absolute;
+      border: var(--line);
+      background: var(--teal);
+      opacity: 0.95;
+    }
+
+    .hero-art::before {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      left: 45px;
+      top: 70px;
+      box-shadow: 12px 12px 0 var(--blue);
+    }
+
+    .hero-art::after {
+      width: 260px;
+      height: 150px;
+      right: -30px;
+      bottom: 55px;
+      transform: rotate(-12deg);
+      background: var(--coral);
+      box-shadow: -12px 12px 0 var(--yellow);
+    }
+
+    .fish {
+      position: absolute;
+      border: var(--line);
+      background: var(--paper);
+      border-radius: 55% 45% 45% 55%;
+      box-shadow: 7px 7px 0 var(--ink);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .fish::before {
+      content: "";
+      position: absolute;
+      right: -38px;
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+      width: 48px;
+      height: 48px;
+      border-top: var(--line);
+      border-right: var(--line);
+      background: inherit;
+    }
+
+    .fish::after {
+      content: "";
+      position: absolute;
+      left: 26px;
+      top: 28px;
+      width: 16px;
+      height: 16px;
+      border: var(--line);
+      border-radius: 50%;
+      background: var(--ink);
+    }
+
+    .fish.one {
+      width: 240px;
+      height: 120px;
+      left: 28%;
+      top: 24%;
+      background: var(--yellow);
+    }
+
+    .fish.two {
+      width: 210px;
+      height: 105px;
+      left: 18%;
+      bottom: 20%;
+      background: var(--teal);
+      animation-delay: 0.7s;
+    }
+
+    .fish.three {
+      width: 145px;
+      height: 72px;
+      right: 16%;
+      top: 45%;
+      background: var(--blue);
+      animation-delay: 1.2s;
+    }
+
+    .section {
+      padding: 86px 6vw;
+      border-bottom: var(--line);
+    }
+
+    .section-title {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: clamp(2.8rem, 6vw, 6.2rem);
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: -3px;
+    }
+
+    .section-title p {
+      margin: 0;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .card {
+      min-height: 290px;
+      padding: 26px;
+      border: var(--line);
+      background: white;
+      box-shadow: 8px 8px 0 var(--ink);
+      transition: transform 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) rotate(-1deg);
+    }
+
+    .card:nth-child(2) {
+      background: var(--teal);
+    }
+
+    .card:nth-child(3) {
+      background: var(--coral);
+      color: white;
+    }
+
+    .card .number {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border: var(--line);
+      background: var(--yellow);
+      color: var(--ink);
+      font-weight: 900;
+      margin-bottom: 48px;
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 2rem;
+      text-transform: uppercase;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .showcase {
+      background: var(--deep);
+      color: var(--paper);
+    }
+
+    .showcase .section-title p {
+      color: #d7d2c8;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+    }
+
+    .project-main,
+    .project-side {
+      border: 3px solid var(--paper);
+      background: #101f34;
+      overflow: hidden;
+    }
+
+    .project-main {
+      min-height: 500px;
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+
+    .project-visual {
+      position: relative;
+      min-height: 360px;
+      background:
+        radial-gradient(circle at 30% 35%, var(--teal) 0 70px, transparent 72px),
+        radial-gradient(circle at 70% 55%, var(--coral) 0 90px, transparent 92px),
+        linear-gradient(135deg, var(--blue), #0b1020);
+    }
+
+    .project-visual::after {
+      content: "PECES RAROS";
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      font-size: clamp(2.5rem, 7vw, 7rem);
+      font-weight: 900;
+      line-height: 0.8;
+      letter-spacing: -4px;
+      color: var(--paper);
+      text-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .project-info {
+      padding: 28px;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+      border-top: 3px solid var(--paper);
+    }
+
+    .project-info h3 {
+      margin: 0;
+      font-size: 2rem;
+      text-transform: uppercase;
+    }
+
+    .project-info p {
+      margin: 8px 0 0;
+      color: #d7d2c8;
+      font-weight: 700;
+    }
+
+    .project-side {
+      display: grid;
+      gap: 0;
+    }
+
+    .mini-project {
+      padding: 28px;
+      min-height: 238px;
+      border-bottom: 3px solid var(--paper);
+      background: linear-gradient(135deg, #101f34, #152b4f);
+    }
+
+    .mini-project:last-child {
+      border-bottom: 0;
+    }
+
+    .mini-project h3 {
+      margin: 0 0 12px;
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+
+    .mini-project p {
+      margin: 0;
+      line-height: 1.5;
+      font-weight: 700;
+      color: #d7d2c8;
+    }
+
+    .characters {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .character {
+      position: relative;
+      min-height: 420px;
+      border: var(--line);
+      background: white;
+      box-shadow: 8px 8px 0 var(--ink);
+      padding: 28px;
+      overflow: hidden;
+    }
+
+    .character:nth-child(2) {
+      background: #e9f8f7;
+    }
+
+    .character h3 {
+      margin: 0;
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: -2px;
+    }
+
+    .character p {
+      max-width: 420px;
+      font-weight: 700;
+      line-height: 1.45;
+      color: #35312b;
+    }
+
+    .character-shape {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
+      width: 230px;
+      height: 230px;
+      border: var(--line);
+      border-radius: 55% 45% 50% 45%;
+      background: var(--teal);
+      box-shadow: 10px 10px 0 var(--coral);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .character:nth-child(2) .character-shape {
+      background: var(--coral);
+      box-shadow: 10px 10px 0 var(--blue);
+      border-radius: 45% 55% 45% 50%;
+      animation-delay: 0.8s;
+    }
+
+    .character-shape::before,
+    .character-shape::after {
+      content: "";
+      position: absolute;
+      top: 78px;
+      width: 24px;
+      height: 24px;
+      border: var(--line);
+      border-radius: 50%;
+      background: var(--ink);
+    }
+
+    .character-shape::before {
+      left: 65px;
+    }
+
+    .character-shape::after {
+      left: 130px;
+    }
+
+    .marquee {
+      display: flex;
+      overflow: hidden;
+      border-top: var(--line);
+      border-bottom: var(--line);
+      background: var(--coral);
+      color: white;
+    }
+
+    .marquee span {
+      white-space: nowrap;
+      padding: 18px 30px;
+      font-size: 2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      animation: scroll 18s linear infinite;
+    }
+
+    .contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px;
+      align-items: stretch;
+    }
+
+    .contact-panel {
+      padding: 36px;
+      border: var(--line);
+      background: var(--yellow);
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    .contact-panel h2 {
+      margin: 0 0 18px;
+      font-size: clamp(2.5rem, 6vw, 6rem);
+      line-height: 0.9;
+      text-transform: uppercase;
+    }
+
+    .contact-panel p {
+      font-size: 1.15rem;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    form {
+      padding: 36px;
+      border: var(--line);
+      background: white;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 18px;
+      border: var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 700;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 28px 6vw;
+      background: var(--ink);
+      color: var(--paper);
+      font-weight: 800;
+    }
+
+    footer a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-18px) rotate(2deg); }
+    }
+
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @media (max-width: 900px) {
+      header {
+        padding: 16px 20px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .hero,
+      .section-title,
+      .project-grid,
+      .characters,
+      .contact {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 48px;
+      }
+
+      .hero-art {
+        min-height: 420px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        letter-spacing: -3px;
+      }
+
+      .project-info {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero,
+      .section {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .fish.one {
+        width: 180px;
+        height: 90px;
+        left: 18%;
+      }
+
+      .fish.two {
+        width: 160px;
+        height: 80px;
+      }
+
+      .fish.three {
+        width: 120px;
+        height: 60px;
+      }
+
+      .character-shape {
+        width: 170px;
+        height: 170px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a class="logo" href="#inicio" aria-label="Inicio Peces Raros">
+        <span class="logo-mark"></span>
+        <span>Peces Raros</span>
+      </a>
+      <nav>
+        <a href="#manifiesto">Manifiesto</a>
+        <a href="#proyectos">Proyectos</a>
+        <a href="#personajes">Personajes</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </header>
+
+    <main id="inicio">
+      <section class="hero">
+        <div>
+          <span class="eyebrow">Colectivo creativo independiente</span>
+          <h1>Peces <span>Raros</span></h1>
+          <p>
+            Creamos mundos visuales, personajes, historias, música y experiencias digitales para personas que no quieren una marca limpia, obediente y aburrida.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="#proyectos">Ver proyectos</a>
+            <a class="btn dark" href="#contacto">Colaborar</a>
+          </div>
+        </div>
+
+        <div class="hero-art" aria-label="Ilustración abstracta de peces raros flotando">
+          <div class="fish one"></div>
+          <div class="fish two"></div>
+          <div class="fish three"></div>
+        </div>
+      </section>
+
+      <section id="manifiesto" class="section">
+        <div class="section-title">
+          <h2>Raros por diseño</h2>
+          <p>
+            Peces Raros es un colectivo visual para piezas con textura, humor, ruido, color y personalidad. No buscamos vernos genéricos. Ya hay demasiadas páginas blancas fingiendo tener alma.
+          </p>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <div class="number">01</div>
+            <h3>Identidad</h3>
+            <p>Diseñamos personajes, sistemas gráficos y mundos visuales con una estética clara: artesanal, digital, expresiva y extraña.</p>
+          </article>
+
+          <article class="card">
+            <div class="number">02</div>
+            <h3>Movimiento</h3>
+            <p>Construimos piezas que pueden vivir en video, web, animación, redes, eventos, música o experiencias interactivas.</p>
+          </article>
+
+          <article class="card">
+            <div class="number">03</div>
+            <h3>Comunidad</h3>
+            <p>Queremos reunir artistas, diseñadores, músicos, narradores y personas que hacen cosas raras con intención.</p>
+          </article>
+        </div>
+      </section>
+
+      <div class="marquee" aria-hidden="true">
+        <span>arte raro · personajes · música · motion · web · stickers · mundos visuales · arte raro · personajes · música · motion · web · stickers · mundos visuales ·</span>
+        <span>arte raro · personajes · música · motion · web · stickers · mundos visuales · arte raro · personajes · música · motion · web · stickers · mundos visuales ·</span>
+      </div>
+
+      <section id="proyectos" class="section showcase">
+        <div class="section-title">
+          <h2>Última ola</h2>
+          <p>
+            Una zona para presentar campañas, portadas, videos, drops, colaboraciones o cualquier experimento que salga del tanque.
+          </p>
+        </div>
+
+        <div class="project-grid">
+          <article class="project-main">
+            <div class="project-visual"></div>
+            <div class="project-info">
+              <div>
+                <h3>Campaña principal</h3>
+                <p>Una colección visual con peces, textura, ruido, humor y color.</p>
+              </div>
+              <a class="btn" href="#contacto">Ver más</a>
+            </div>
+          </article>
+
+          <aside class="project-side">
+            <article class="mini-project">
+              <h3>Stickers raros</h3>
+              <p>Personajes coleccionables, frases, mini escenas y piezas listas para impresión o redes.</p>
+            </article>
+            <article class="mini-project">
+              <h3>Sesiones visuales</h3>
+              <p>Fondos, loops, carteles y layouts para eventos, música, streams o videos experimentales.</p>
+            </article>
+          </aside>
+        </div>
+      </section>
+
+      <section id="personajes" class="section">
+        <div class="section-title">
+          <h2>Personajes principales</h2>
+          <p>
+            Esta sección puede mostrar a los protagonistas del colectivo. Cada personaje puede tener historia, personalidad, stickers, animaciones y piezas de campaña.
+          </p>
+        </div>
+
+        <div class="characters">
+          <article class="character">
+            <h3>Pez Uno</h3>
+            <p>Curioso, eléctrico y un poco dramático. Ideal para representar ideas rápidas, anuncios, eventos y energía creativa.</p>
+            <div class="character-shape"></div>
+          </article>
+
+          <article class="character">
+            <h3>Pez Dos</h3>
+            <p>Más misterioso, visual y nocturno. Sirve para campañas, historias, portadas, música y piezas con atmósfera.</p>
+            <div class="character-shape"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="contacto" class="section">
+        <div class="contact">
+          <div class="contact-panel">
+            <h2>Hagamos algo raro</h2>
+            <p>
+              Escríbenos para colaborar, hacer una portada, una campaña visual, una página web, stickers, visuales para música o una experiencia interactiva.
+            </p>
+            <p><strong>Email:</strong> hola@pecesraros.com</p>
+            <p><strong>Instagram:</strong> @pecesraros</p>
+          </div>
+
+          <form>
+            <label for="name">Nombre</label>
+            <input id="name" type="text" placeholder="Tu nombre" />
+
+            <label for="email">Correo</label>
+            <input id="email" type="email" placeholder="tu@email.com" />
+
+            <label for="message">Mensaje</label>
+            <textarea id="message" placeholder="Cuéntanos qué quieres crear"></textarea>
+
+            <button class="btn dark" type="submit">Enviar mensaje</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Peces Raros © 2026</span>
+      <span>Diseño, arte, web y criaturas visuales.</span>
+      <a href="#inicio">Volver arriba</a>
+    </footer>
+  </div>
+</body>
+</html>
